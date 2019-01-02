@@ -18,7 +18,7 @@ jest.mock("../plugins/git/loadGitData", () => ({
   loadGitData: jest.fn(),
 }));
 
-export const fakeTimestamp = new Date();
+const fakeTimestamp = () => new Date(1000);
 
 type JestMockFn = $Call<typeof jest.fn>;
 const execDependencyGraph: JestMockFn = (require("../tools/execDependencyGraph"): any);
@@ -432,7 +432,10 @@ describe("cli/load", () => {
           .toString();
         const registry = RepoIdRegistry.fromJSON(JSON.parse(blob));
         const expected: RepoIdRegistry.RepoIdRegistry = [
-          {repoId: stringToRepoId("foo/combined"), timestamp: fakeTimestamp},
+          {
+            repoId: stringToRepoId("foo/combined"),
+            timestamp: fakeTimestamp(),
+          },
         ];
         expect(registry).toEqual(expected);
       });
@@ -445,11 +448,11 @@ describe("cli/load", () => {
             RepoIdRegistry.toJSON([
               {
                 repoId: stringToRepoId("previous/one"),
-                timestamp: fakeTimestamp,
+                timestamp: fakeTimestamp(),
               },
               {
                 repoId: stringToRepoId("previous/two"),
-                timestamp: fakeTimestamp,
+                timestamp: fakeTimestamp(),
               },
             ])
           )
@@ -463,9 +466,18 @@ describe("cli/load", () => {
           .toString();
         const registry = RepoIdRegistry.fromJSON(JSON.parse(blob));
         const expected: RepoIdRegistry.RepoIdRegistry = [
-          {repoId: stringToRepoId("previous/one"), timestamp: fakeTimestamp},
-          {repoId: stringToRepoId("previous/two"), timestamp: fakeTimestamp},
-          {repoId: stringToRepoId("foo/combined"), timestamp: fakeTimestamp},
+          {
+            repoId: stringToRepoId("previous/one"),
+            timestamp: fakeTimestamp(),
+          },
+          {
+            repoId: stringToRepoId("previous/two"),
+            timestamp: fakeTimestamp(),
+          },
+          {
+            repoId: stringToRepoId("foo/combined"),
+            timestamp: fakeTimestamp(),
+          },
         ];
         expect(registry).toEqual(expected);
       });

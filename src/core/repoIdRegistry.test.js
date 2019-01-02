@@ -9,7 +9,8 @@ import {
 } from "./repoIdRegistry";
 
 import {makeRepoId} from "../core/repoId";
-import {fakeTimestamp} from "../cli/load.test";
+
+const fakeTimestamp = () => new Date(1000);
 
 describe("core/repoIdRegistry", () => {
   describe("fromJSON compose on", () => {
@@ -22,8 +23,8 @@ describe("core/repoIdRegistry", () => {
     });
     it("nonempty registry", () => {
       checkExample([
-        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp},
-        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp},
+        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp()},
+        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp()},
       ]);
     });
   });
@@ -32,49 +33,51 @@ describe("core/repoIdRegistry", () => {
       expect(
         addRepoId(emptyRegistry(), {
           repoId: makeRepoId("foo", "bar"),
-          timestamp: fakeTimestamp,
+          timestamp: fakeTimestamp(),
         })
-      ).toEqual([{repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp}]);
+      ).toEqual([
+        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp()},
+      ]);
     });
     it("adds to nonempty registry", () => {
       const registry = [
-        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp},
+        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp()},
       ];
       expect(
         addRepoId(registry, {
           repoId: makeRepoId("zoo", "zod"),
-          timestamp: fakeTimestamp,
+          timestamp: fakeTimestamp(),
         })
       ).toEqual([
-        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp},
-        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp},
+        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp()},
+        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp()},
       ]);
     });
     it("adding repoId that is already the last has no effect", () => {
       const registry = [
-        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp},
-        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp},
+        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp()},
+        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp()},
       ];
       expect(
         addRepoId(registry, {
           repoId: makeRepoId("foo", "bar"),
-          timestamp: fakeTimestamp,
+          timestamp: fakeTimestamp(),
         })
       ).toEqual(registry);
     });
     it("adding already-existing repoId shifts it to the end", () => {
       const registry = [
-        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp},
-        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp},
+        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp()},
+        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp()},
       ];
       expect(
         addRepoId(registry, {
           repoId: makeRepoId("zoo", "zod"),
-          timestamp: fakeTimestamp,
+          timestamp: fakeTimestamp(),
         })
       ).toEqual([
-        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp},
-        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp},
+        {repoId: makeRepoId("foo", "bar"), timestamp: fakeTimestamp()},
+        {repoId: makeRepoId("zoo", "zod"), timestamp: fakeTimestamp()},
       ]);
     });
   });

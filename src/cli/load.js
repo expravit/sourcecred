@@ -213,7 +213,7 @@ function addToRepoIdRegistry(repoId) {
   } else {
     registry = RepoIdRegistry.emptyRegistry();
   }
-  let timestamp = new Date();
+  const timestamp = new Date();
   registry = RepoIdRegistry.addRepoId(registry, {repoId, timestamp});
 
   fs.writeFileSync(outputFile, stringify(RepoIdRegistry.toJSON(registry)));

@@ -2,18 +2,19 @@
 
 import {stringToRepoId} from "../core/repoId";
 import {makeRouteData} from "./routeData";
-import {fakeTimestamp} from "../cli/load.test";
+
+const fakeTimestamp = () => new Date(1000);
 
 describe("homepage/routeData", () => {
   function routeData() {
     return makeRouteData([
       {
         repoId: stringToRepoId("sourcecred/example-github"),
-        timestamp: fakeTimestamp,
+        timestamp: fakeTimestamp(),
       },
       {
         repoId: stringToRepoId("sourcecred/sourcecred"),
-        timestamp: fakeTimestamp,
+        timestamp: fakeTimestamp(),
       },
     ]);
   }
